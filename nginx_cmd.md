@@ -300,6 +300,85 @@ server {
   + seamlessly show content from different websites, or 
   + pass requests for processing to application servers over protocols other than HTTP.
 
+- Passing a Request to a Proxied Server:
+    + When NGINX proxies a request, it sends the request to a specified proxied server, fetches the response, and sends it back to the client. 
+    + It is possible to proxy requests to an HTTP server (another NGINX server or any other server) 
+    + or a non-HTTP server (which can run an application developed with a specific framework, such as PHP or Python) using a specified protocol. Supported protocols include FastCGI, uwsgi, SCGI, and memcached.
+
+- **To pass a request to an HTTP proxied server**, the **proxy_pass** directive is *specified inside a* **location**. For example:
+```
+server {
+    listen              {{ keepalived.internal_vip | default(internal_ip_addr) }}:443 ssl;
+    server_name         {{ anv2.operation_domain }};
+    ssl_certificate     /etc/nginx/ssl/{{ anv2.operation_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/{{ anv2.operation_domain }}/privkey.pem;
+    add_header          Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+
+    location / {
+        include              /etc/nginx/proxy_params;
+        proxy_pass           http://{{ anv2.wallet_authentication.host }}:{{ anv2.wallet_authentication.port }}/;
+    }
+
+    location /customer/ {
+        include              /etc/nginx/proxy_params;
+        proxy_pass           http://{{ anv2.acquire_agent.host }}:{{ anv2.acquire_agent.port }}/;
+        client_max_body_size    20M;
+    }
+
+    location /setting/ {
+        include              /etc/nginx/proxy_params;
+        proxy_pass           http://{{ anv2.management_user.host }}:{{ anv2.management_user.port }}/;
+    }
+
+    location /operation/ {
+        include              /etc/nginx/proxy_params;
+        proxy_pass           http://{{ anv2.inventory_frontend.host }}:{{ anv2.inventory_frontend.port }}/;
+    }
+
+    location /provider/ {
+        include              /etc/nginx/proxy_params;
+        proxy_pass           http://{{ anv2.wallet_service_frontend.host }}:{{ anv2.wallet_service_frontend.port }}/provider/;
+    }
+    ...
+server {
+    listen      {{ keepalived.internal_vip | default(internal_ip_addr) }}:80;
+    server_name {{ anv2.operation_domain }};
+    return      301 https://$host$request_uri;
+}
+```
+- Variable from group_vars/bizdev:
+```
+- group_vars/bizdev
+  wallet_authentication:
+    host: "{{ groups['anv2-wallet-authentication'][0] }}"
+    port: 11205
+
+- inventory: bizdev
+[anv2-wallet-authentication]
+172.30.2.12
+
+- group_vars/bizdev
+  acquire_agent:
+    host: "{{ groups['anv2-acquire-agent'][0] }}"
+    port: 11240
+
+server {
+    listen      {{ keepalived.internal_vip | default(internal_ip_addr) }}:80;
+=> in group_var/bizdev: keepalived.internal_vip  doesn't exist/define
+=> So will use default(internal_ip_addr)
+=> in group_var/bizdev: internal_ip_addr  doesn't exist/define
+=> So with the default variable precedence: ansible will check in inventory "bizdev" for "internal_ip_addr" :
+  => so group host proxy: has 2 value for "internal_ip_addr" :  172.30.1.41, 172.30.1.42
+  => It will take 1 IP at the time
+
+```
+- To pass a request to a **non-HTTP proxied server**, the appropriate \*\*\_pass directive should be used:
+```
+    fastcgi_pass passes a request to a FastCGI server
+    uwsgi_pass passes a request to a uwsgi server
+    scgi_pass passes a request to an SCGI server
+    memcached_pass passes a request to a memcached server
+```
 
 
 ### X. Common Modules:
