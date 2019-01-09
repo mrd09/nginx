@@ -131,7 +131,7 @@ where <SIGNAL> can be one of the following:
     reload – Reload the configuration file => only reload the config if fail
     reopen – Reopen log files
     stop – Shut down immediately (fast shutdown)
-```    
+```
 - **reload: Reloading is safer than restarting:** because of this behaviors:
     - In order for nginx to **re-read the conf file**, a **HUP signal should be sent to the *master process***. 
     - The **master process first checks the syntax validity, then tries to apply new configuration**, that is, to open log files and new listen sockets. 
@@ -166,7 +166,7 @@ Dec 12 10:26:36 mrd09 systemd[1]: Reload failed for A high performance web serve
  8986  5982 mrd09     0.0  23076 pipe_w grep -E --color=auto (nginx|PID)
 28978     1 root      0.0 140764 -      nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
 
-```        
+```
 
 ### 3.2. Creating NGINX Plus and NGINX Configuration Files:
 - Nginx config : text‑based configuration file written in a particular format. 
