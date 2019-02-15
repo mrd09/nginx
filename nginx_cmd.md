@@ -380,6 +380,12 @@ server {
     memcached_pass passes a request to a memcached server
 ```
 
+## 5. HA for nginx:
+### 5.1. Configuring Active-Active High Availability and Additional Passive Nodes with keepalived
+- [Active-Active High Availability and Additional Passive](https://docs.nginx.com/nginx/admin-guide/high-availability/ha-keepalived-nodes/)
+
+### 5.2. Active-Passive HA for NGINX Plus on AWS Using Elastic IP Addresses
+- [Active-Passive HA for NGINX Plus on AWS Using Elastic IP Addresses](https://docs.nginx.com/nginx/deployment-guides/aws-high-availability-keepalived/?_ga=2.128321612.1168462812.1550026286-1562094806.1544583411)
 
 ### X. Common Modules:
 #### X.1. ngx_http_core_module:
