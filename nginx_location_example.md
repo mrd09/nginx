@@ -4,7 +4,7 @@
 [http code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.2)
 [proxy_pass example](https://www.liaohuqiu.net/posts/nginx-proxy-pass/)
 
-# Overview Example of nginx:
+# 1. Overview Example of nginx:
 ##  Example nginx config:
 - `proxy_params` config: `add parameter to IP HEADER` `when proxy to backend server`
 
@@ -200,7 +200,7 @@ User access test.com/app/xxxxx
                 + `is passed when processing the changed URI`:
 ```
         location /app/ {
-            proxy_pass      http://192.168.154.102:8080;     =>>> Notice about there is no trailing slash (/)  at the end of the proxy_pass
+            proxy_pass      http://192.168.154.102:8080/;     =>>> Notice about there is no trailing slash (/)  at the end of the proxy_pass
         }
 
         location /portal/ {
@@ -222,7 +222,7 @@ If we append slash(/) in config:
         -> append the rest after matched "/portal/": "abc" to: proxy_pass http://192.168.154.102/portal/abc
 ```
 
-# What is URL: The general form of an URL has four parts
+# 2. What is URL: The general form of an URL has four parts
 
 - Part1: A scheme followed by a colon.
     + Invokes a TCP/IP-based application level protocol
@@ -250,7 +250,7 @@ If we append slash(/) in config:
     + May also include a QUERY_STRING with arguments. 
     * Ftp uses port 20 for data and port 21 for flow control.
 
-# URL vs URN vs URI:
+# 3. URL vs URN vs URI:
 -  What is an URL
     + An Uniform Resource Locator (URL) is the term used to identify an Internet resource, and can be specified in a single line of text.
 
@@ -303,10 +303,10 @@ URI     http://www.pierobon.org/iis/review1.htm.html#one
   scheme                    path
 ```
 
-# HTTP code:
+# 4. HTTP code:
 [http code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.2)
 
-# location module:
+# 5. location module:
 - Syntax: 
 ```
 Syntax:     location [ = | ~ | ~* | ^~ ] uri { ... }
@@ -468,7 +468,7 @@ If we append slash(/) in config:
         -> append the rest after matched "/portal/": "abc" to: proxy_pass http://192.168.154.102/portal/abc
 ```
 
-# return module:
+# 6. return module:
 [nginx http rewrite module](http://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return)
 
 - Syntax:
@@ -486,7 +486,7 @@ Context:    server, location, if
     - Such a parameter should start with the “http://”, “https://”, or “$scheme” string. 
     - A URL can contain variables. 
 
-# Reverse proxy config:
+# 7. Reverse proxy config:
 ##  proxy_set_header:
 - Syntax:
 ```
@@ -695,7 +695,7 @@ server {
 
 - With this configuration, the backend server will receive whatever Host HTTP header your browser sent that matched this server block, which is particularly useful if you use a regular expression to match host names.
 
-# Index of nginx variable:
+# 8. Index of nginx variable:
 [ngx_http_core module](http://nginx.org/en/docs/http/ngx_http_core_module.html#var_host)
 ##  $host
 - in this order of precedence:
